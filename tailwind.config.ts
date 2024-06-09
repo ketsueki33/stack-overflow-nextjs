@@ -40,6 +40,8 @@ const config: Config = {
                 "accent-blue": "#1DA1F2",
             },
             fontFamily: {
+                sans: ["var(--font-inter)"],
+                grotesk: ["var(--font-spaceGrotesk)"],
                 inter: ["var(--fo ar(--font-spaceGrotesk)"],
             },
             boxShadow: {
