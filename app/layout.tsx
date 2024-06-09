@@ -39,8 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <body className="font-sans">
                     This text will use default inter font taken from body className
                     <h1 className="h1-bold font-grotesk">
-                        {" "}
-                        This text will use space grotesk front taken from this h1 className
+                        This text will use space grotesk font taken from this h1 className
                     </h1>
                     {/* <header>
         <SignedOut>
