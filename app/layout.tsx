@@ -5,6 +5,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 // eslint-disable-next-line camelcase
 import { Inter, Space_Grotesk } from "next/font/google";
+import { ThemeProvider } from "@/context/ThemeProvider";
 
 export const metadata: Metadata = {
     title: "CodeOverflow",
@@ -27,31 +28,19 @@ const spaceGrotesk = Space_Grotesk({
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <ClerkProvider
-            appearance={{
-                elements: {
-                    formButtonPrimary: "primary-gradient",
-                    footerActionLink: "primary-text-gradient hover:text-primary-500",
-                },
-            }}
-        >
-            <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-                <body className="font-sans">
-                    This text will use default inter font taken from body className
-                    <h1 className="h1-bold font-grotesk">
-                        This text will use space grotesk font taken from this h1 className
-                    </h1>
-                    {/* <header>
-        <SignedOut>
-            <SignInButton />
-        </SignedOut>
-        <SignedIn>
-            <UserButton/>
-        </SignedIn>
-    </header> */}
-                    <main>{children}</main>
-                </body>
-            </html>
-        </ClerkProvider>
+        <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+            <body>
+                <ClerkProvider
+                    appearance={{
+                        elements: {
+                            formButtonPrimary: "primary-gradient",
+                            footerActionLink: "primary-text-gradient hover:text-primary-500",
+                        },
+                    }}
+                >
+                    <ThemeProvider>{children}</ThemeProvider>
+                </ClerkProvider>
+            </body>
+        </html>
     );
 }
