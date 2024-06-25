@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
 import "./globals.css";
+import "../styles/theme.css";
 
 import type { Metadata } from "next";
 // eslint-disable-next-line camelcase
@@ -34,7 +35,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     appearance={{
                         elements: {
                             formButtonPrimary: "primary-gradient",
-                            footerActionLink: "primary-text-gradient hover:text-primary-500",
+                            footerActionLink:
+                                "primary-text-gradient hover:text-primary-500",
                         },
                     }}
                 >

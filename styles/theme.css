@@ -167,6 +167,10 @@
         @apply text-[12px] font-semibold leading-[15.6px];
     }
 
+    .small-bold {
+        @apply text-[12px] font-bold leading-[15.6px];
+    }
+
     .subtle-medium {
         @apply text-[10px] font-medium leading-[13px] !important;
     }
@@ -196,6 +200,10 @@
     }
 
     .dark-gradient {
-        background: linear-gradient(232deg, rgba(23, 28, 35, 0.41) 0%, rgba(19, 22, 28, 0.7) 100%);
+        background: linear-gradient(
+            232deg,
+            rgba(23, 28, 35, 0.41) 0%,
+            rgba(19, 22, 28, 0.7) 100%
+        );
     }
 }

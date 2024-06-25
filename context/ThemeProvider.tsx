@@ -1,29 +1,52 @@
 "use client";
 
-import { ReactNode, createContext, useContext, useState } from "react";
+import { Mode } from "@/types";
+import {
+    ReactNode,
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 
 interface ThemeContextType {
-    mode: "dark" | "light";
-    toggleTheme: () => void;
+    mode: Mode;
+    setTheme: (newMode: Mode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({} as ThemeContextType);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-    const [mode, setMode] = useState<"dark" | "light">("dark");
+    const [mode, setMode] = useState<Mode>("dark");
 
-    const toggleTheme = () => {
-        if (mode === "dark") {
-            setMode("light");
-            document.documentElement.classList.add("light");
-        }
-        if (mode === "light") {
-            setMode("dark");
-            document.documentElement.classList.add("dark");
-        }
+    const setTheme = (newMode: Mode) => {
+        setMode(newMode);
     };
 
-    return <ThemeContext.Provider value={{ mode, toggleTheme }}>{children}</ThemeContext.Provider>;
+    const handleThemeChange = useCallback(() => {
+        if (
+            localStorage.theme === "dark" ||
+            (!("theme" in localStorage) &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches)
+        ) {
+            if (mode !== "dark") setMode("dark");
+            document.documentElement.classList.add("dark");
+        } else {
+            if (mode !== "light") setMode("light");
+            document.documentElement.classList.remove("dark");
+        }
+    }, [mode]); // Add any dependencies of handleThemeChange here
+
+    useEffect(() => {
+        handleThemeChange();
+    }, [handleThemeChange]);
+
+    return (
+        <ThemeContext.Provider value={{ mode, setTheme }}>
+            {children}
+        </ThemeContext.Provider>
+    );
 }
 
 export function useTheme() {
