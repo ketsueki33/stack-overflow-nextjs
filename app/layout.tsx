@@ -30,7 +30,7 @@ const spaceGrotesk = Space_Grotesk({
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
         <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-            <body>
+            <body className="font-sans">
                 <ClerkProvider
                     appearance={{
                         elements: {

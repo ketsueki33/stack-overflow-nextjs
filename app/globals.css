@@ -116,6 +116,11 @@ body {
         background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
     }
 
+    .remove-gradient-on-hover:hover {
+        /* background: linear-gradient(207deg, #43cea2 0%, #185a90 100%); */
+        background: none;
+    }
+
     .dark-gradient {
         background: linear-gradient(
             232deg,

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { sidebarLinks } from "@/constants";
 import { SignedOut } from "@clerk/nextjs";
-import { Menu } from "lucide-react";
+import { LogIn, Menu, UserPlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -23,9 +23,9 @@ const NavContent = () => {
                             href={item.route}
                             className={`${
                                 isActive
-                                    ? "primary-gradient rounded-lg text-light-900"
-                                    : "text-dark300_light900"
-                            } flex items-center justify-start gap-4 bg-transparent p-4`}
+                                    ? "primary-gradient  remove-gradient-on-hover text-light-900 hover:bg-primary-500"
+                                    : "text-dark300_light900  hover:bg-slate-200 dark:hover:bg-slate-800"
+                            } flex items-center justify-start gap-4 rounded-lg bg-transparent p-4`}
                         >
                             <Image
                                 src={item.imgURL}
@@ -78,10 +78,9 @@ const MobileNav = () => {
                         <div className="mb-6 flex flex-col gap-3">
                             <SheetClose asChild>
                                 <Link href="/sign-in">
-                                    <Button className="btn-secondary small-bold min-h-[41px] w-full rounded-lg px-4 py-3 ">
-                                        <span className="primary-text-gradient">
-                                            Sign In
-                                        </span>
+                                    <Button className=" btn-secondary small-bold min-h-[41px] w-full rounded-lg px-4 py-3 text-primary-300">
+                                        <LogIn className="mr-2" size={20} />
+                                        Sign In
                                     </Button>
                                 </Link>
                             </SheetClose>
@@ -91,6 +90,7 @@ const MobileNav = () => {
                                         variant="orange"
                                         className=" small-bold my-3 min-h-[41px] w-full rounded-lg px-4"
                                     >
+                                        <UserPlus className="mr-2" size={20} />
                                         Sign Up
                                     </Button>
                                 </Link>
