@@ -1,4 +1,4 @@
-import { BADGE_CRITERIA} from "@/constants";
+import { BADGE_CRITERIA } from "@/constants";
 
 export type Mode = "dark" | "light" | "system";
 

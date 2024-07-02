@@ -1,7 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 import { sidebarLinks } from "@/constants";
 import { SignedOut } from "@clerk/nextjs";
 import { LogIn, Menu, UserPlus } from "lucide-react";
@@ -23,8 +28,8 @@ const NavContent = () => {
                             href={item.route}
                             className={`${
                                 isActive
-                                    ? "primary-gradient  remove-gradient-on-hover text-light-900 hover:bg-primary-500"
-                                    : "text-dark300_light900  hover:bg-slate-200 dark:hover:bg-slate-800"
+                                    ? "primary-gradient remove-gradient-on-hover text-light-900 hover:bg-primary-500"
+                                    : "text-dark300_light900 hover:bg-slate-200 dark:hover:bg-slate-800"
                             } flex items-center justify-start gap-4 rounded-lg bg-transparent p-4`}
                         >
                             <Image
@@ -34,7 +39,11 @@ const NavContent = () => {
                                 height={20}
                                 className={isActive ? "" : "invert-colors"}
                             />
-                            <p className={isActive ? "body-semibold" : "body-medium"}>
+                            <p
+                                className={
+                                    isActive ? "body-semibold" : "body-medium"
+                                }
+                            >
                                 {item.label}
                             </p>
                         </Link>
@@ -59,7 +68,10 @@ const MobileNav = () => {
                     />
                 </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="background-light900_dark200 border-none">
+            <SheetContent
+                side="left"
+                className="background-light900_dark200 border-none"
+            >
                 <Link href="/" className="flex items-center gap-1">
                     <Image
                         src="/assets/images/site-logo.svg"
@@ -67,7 +79,7 @@ const MobileNav = () => {
                         height={23}
                         alt="CodeOverflow"
                     />
-                    <p className="h2-bold font-grotesk text-dark-100 dark:text-light-900 ">
+                    <p className="h2-bold font-grotesk text-dark-100 dark:text-light-900">
                         Code
                         <span className="text-primary-500">Overflow</span>
                     </p>
@@ -78,7 +90,7 @@ const MobileNav = () => {
                         <div className="mb-6 flex flex-col gap-3">
                             <SheetClose asChild>
                                 <Link href="/sign-in">
-                                    <Button className=" btn-secondary small-bold min-h-[41px] w-full rounded-lg px-4 py-3 text-primary-300">
+                                    <Button className="btn-secondary small-bold min-h-[41px] w-full rounded-lg px-4 py-3 text-primary-300">
                                         <LogIn className="mr-2" size={20} />
                                         Sign In
                                     </Button>
@@ -88,7 +100,7 @@ const MobileNav = () => {
                                 <Link href="/sign-up">
                                     <Button
                                         variant="orange"
-                                        className=" small-bold my-3 min-h-[41px] w-full rounded-lg px-4"
+                                        className="small-bold my-3 min-h-[41px] w-full rounded-lg px-4"
                                     >
                                         <UserPlus className="mr-2" size={20} />
                                         Sign Up
