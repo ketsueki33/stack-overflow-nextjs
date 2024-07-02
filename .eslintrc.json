@@ -3,6 +3,8 @@
     "extends": [
         "next/core-web-vitals",
         "standard",
+        "eslint:recommended",
+        "plugin:prettier/recommended",
         "plugin:tailwindcss/recommended",
         "prettier"
     ],
@@ -11,5 +13,6 @@
         {
             "files": ["*.ts", "*.tsx", "*.js"]
         }
-    ]
+    ],
+    "plugins": ["tailwindcss"]
 }
