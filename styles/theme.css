@@ -3,6 +3,22 @@
 @tailwind utilities;
 
 @layer utilities {
+    .primary-gradient {
+        background: linear-gradient(207deg, #43cea2 0%, #185a90 100%);
+    }
+
+    .remove-gradient-on-hover:hover {
+        background: none;
+    }
+
+    .dark-gradient {
+        background: linear-gradient(
+            232deg,
+            rgba(23, 28, 35, 0.41) 0%,
+            rgba(19, 22, 28, 0.7) 100%
+        );
+    }
+
     .background-light850_dark100 {
         @apply bg-light-850 dark:bg-dark-100;
     }
@@ -16,7 +32,7 @@
     }
 
     .background-light800_darkgradient {
-        @apply bg-light-800 dark:dark-gradient;
+        @apply dark:dark-gradient bg-light-800;
     }
 
     .background-light800_dark400 {
@@ -193,17 +209,5 @@
 
     .shadow-light100_darknone {
         @apply shadow-light-100 dark:shadow-none;
-    }
-
-    .primary-gradient {
-        background: linear-gradient(129deg, #ff7000 0%, #e2995f 100%);
-    }
-
-    .dark-gradient {
-        background: linear-gradient(
-            232deg,
-            rgba(23, 28, 35, 0.41) 0%,
-            rgba(19, 22, 28, 0.7) 100%
-        );
     }
 }

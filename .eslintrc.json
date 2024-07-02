@@ -14,5 +14,8 @@
             "files": ["*.ts", "*.tsx", "*.js"]
         }
     ],
-    "plugins": ["tailwindcss"]
+    "plugins": ["tailwindcss"],
+    "rules": {
+        "prettier/prettier": "warn"
+    }
 }
