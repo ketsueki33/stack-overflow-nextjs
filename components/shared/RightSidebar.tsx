@@ -27,27 +27,27 @@ const tempQuestions = [
 
 const tempTags = [
     {
-        _id: 1,
+        _id: "1",
         name: "React",
         totalQuestions: 5,
     },
     {
-        _id: 2,
+        _id: "2",
         name: "TypeScript",
         totalQuestions: 1,
     },
     {
-        _id: 3,
+        _id: "3",
         name: "Python",
         totalQuestions: 2,
     },
     {
-        _id: 4,
+        _id: "4",
         name: "Rust",
         totalQuestions: 3,
     },
     {
-        _id: 5,
+        _id: "5",
         name: "Tailwind",
         totalQuestions: 8,
     },

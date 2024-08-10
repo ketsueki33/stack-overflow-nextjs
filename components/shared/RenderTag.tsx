@@ -2,16 +2,19 @@ import Link from "next/link";
 import { Badge } from "../ui/badge";
 
 interface Props {
-    _id: number;
+    _id: string;
     name: string;
     showCount?: boolean;
-    totalQuestions: number;
+    totalQuestions?: number;
 }
 
 const RenderTag = ({ _id, name, showCount = false, totalQuestions }: Props) => {
     return (
         <Link href={`/tags/${_id}`}>
-            <Badge variant="secondary" className="small-medium px-3 py-1 uppercase">
+            <Badge
+                variant="secondary"
+                className="small-medium px-3 py-1 uppercase"
+            >
                 {name}
                 {showCount && (
                     <div className="text-light400_light500">

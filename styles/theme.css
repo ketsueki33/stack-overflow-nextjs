@@ -19,6 +19,10 @@
         );
     }
 
+    .card-wrapper {
+        @apply dark:dark-gradient bg-light-900 shadow-light-100 dark:shadow-dark-100;
+    }
+
     .background-light850_dark100 {
         @apply bg-light-850 dark:bg-dark-100;
     }
@@ -33,6 +37,10 @@
 
     .background-light800_darkgradient {
         @apply dark:dark-gradient bg-light-800;
+    }
+
+    .background-light800_dark200 {
+        @apply bg-light-800 dark:bg-dark-200;
     }
 
     .background-light800_dark400 {
