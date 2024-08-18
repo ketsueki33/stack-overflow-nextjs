@@ -23,17 +23,22 @@ import { useTheme } from "@/context/ThemeProvider";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion } from "@/lib/actions/question.action";
+import { usePathname, useRouter } from "next/navigation";
 
 interface Props {
+    mongoUserId: string;
     purpose?: "edit" | "post";
 }
 
-const Question = ({ purpose = "post" }: Props) => {
+const Question = ({ mongoUserId, purpose = "post" }: Props) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const editorRef = useRef(null);
     const { mode } = useTheme();
     const editorKey = `editor-${mode}`;
+
+    const router = useRouter();
+    const pathname = usePathname();
 
     const form = useForm<z.infer<typeof QuestionsSchema>>({
         resolver: zodResolver(QuestionsSchema),
@@ -51,7 +56,15 @@ const Question = ({ purpose = "post" }: Props) => {
         console.log("trigger");
 
         try {
-            await createQuestion();
+            await createQuestion({
+                title: values.title,
+                content: values.explanation,
+                tags: values.tags,
+                author: JSON.parse(mongoUserId),
+                path: pathname,
+            });
+
+            router.push("/");
         } catch (error) {
         } finally {
             setIsSubmitting(false);
