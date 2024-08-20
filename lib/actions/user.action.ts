@@ -47,6 +47,8 @@ export async function updateUser(params: UpdateUserParams) {
         const user = await User.findOneAndUpdate({ clerkId }, updateData);
 
         revalidatePath(path);
+
+        return user;
     } catch (error) {
         console.log(error);
         throw error;

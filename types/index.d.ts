@@ -55,7 +55,7 @@ export interface Question {
     views: number;
     answers: string[];
     createdAt: Date;
-    author: { _id: string; name: string; picture: string };
+    author: { _id: string; name: string; picture: string; username: string };
 }
 
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA;

@@ -33,7 +33,7 @@ const QuestionCard = ({ qn }: Props) => {
                 <Metric
                     imgUrl={qn.author.picture}
                     alt="User"
-                    value={qn.author.name}
+                    value={qn.author.username}
                     title={"- asked " + timestamp}
                     href={`/profile/${qn.author._id}`}
                     isAuthor
