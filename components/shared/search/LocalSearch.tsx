@@ -20,7 +20,7 @@ const LocalSearch = ({
 }: Props) => {
     return (
         <div
-            className={`background-light800_darkgradient relative flex min-h-[40px] grow items-center gap-1 rounded-xl px-4 ${customClasses}`}
+            className={`background-light800_dark300 relative flex min-h-[40px] grow items-center gap-1 rounded-xl px-4 ${customClasses}`}
         >
             {iconPosition === "left" && (
                 <Image
