@@ -22,7 +22,7 @@ const Community = async () => {
                     customClasses="min-h-[40px] sm:min-w-[170px]"
                 />
             </div>
-            <section className="mt-12 flex flex-wrap gap-4">
+            <section className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 min-[1100px]:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
                 {results.users.length > 0 ? (
                     results.users.map((user) => (
                         <UserCard key={user.clerkId} user={user} />

@@ -1,9 +1,9 @@
 import { IUser } from "@/database/user.model";
 import { getTopInteractedTags } from "@/lib/actions/tag.action";
-import { Badge } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import RenderTag from "../shared/RenderTag";
+import { Badge } from "../ui/badge";
 
 interface Props {
     user: IUser;
@@ -14,7 +14,7 @@ const UserCard = async ({ user }: Props) => {
     return (
         <Link
             href={`/profile/${user.clerkId}`}
-            className="shadow-light100_darknone w-full max-xs:min-w-full xs:w-[260px]"
+            className="shadow-light100_darknone mx-auto w-full max-w-[320px]"
         >
             <div className="background-light900_dark200 light-border flex w-full flex-col items-center justify-center rounded-2xl border p-8">
                 <Image
@@ -34,7 +34,7 @@ const UserCard = async ({ user }: Props) => {
                 </div>
                 <div className="mt-5">
                     {interactedTags.length > 0 ? (
-                        <div className="flex items-center gap-2">
+                        <div className="-mx-3 flex flex-wrap items-center justify-center gap-2">
                             {interactedTags.map((tag) => (
                                 <RenderTag
                                     key={tag._id}
@@ -44,7 +44,9 @@ const UserCard = async ({ user }: Props) => {
                             ))}
                         </div>
                     ) : (
-                        <Badge>No Tags Yet</Badge>
+                        <Badge variant="destructive_secondary">
+                            No Tags Yet
+                        </Badge>
                     )}
                 </div>
             </div>
