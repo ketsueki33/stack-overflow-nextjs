@@ -3,9 +3,14 @@
 import Question, { IQuestion } from "@/database/question.model";
 import { connectToDatabase } from "../mongoose";
 import Tag from "@/database/tag.model";
-import { CreateQuestionParams, GetQuestionsParams } from "./shared.types";
+import {
+    CreateQuestionParams,
+    GetQuestionByIdParams,
+    GetQuestionsParams,
+} from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
+import { PopulatedQuestionById } from "@/types";
 
 export async function getQuestions(params: GetQuestionsParams) {
     try {
@@ -18,6 +23,7 @@ export async function getQuestions(params: GetQuestionsParams) {
             })
             .populate({ path: "author", model: User })
             .sort({ createdAt: -1 });
+
         return { questions };
     } catch (error) {
         console.log(error);
@@ -63,4 +69,30 @@ export async function createQuestion(params: CreateQuestionParams) {
         // TODO: Create an interaction record for user's ask question action
         // TODO: Incremenet author's reputation by +5 for creating a question
     } catch (error) {}
+}
+
+export async function getQuestionById(
+    params: GetQuestionByIdParams,
+): Promise<PopulatedQuestionById> {
+    try {
+        connectToDatabase();
+        const { questionId } = params;
+
+        const question = await Question.findById(questionId)
+            .populate({
+                path: "tags",
+                model: Tag,
+                select: "name _id",
+            })
+            .populate({
+                path: "author",
+                model: User,
+                select: "clerkId _id picture username",
+            });
+
+        return question;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }

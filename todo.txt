@@ -1,0 +1,1 @@
+1. Handle questions and answers of deleted users

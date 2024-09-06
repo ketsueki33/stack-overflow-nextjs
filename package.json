@@ -26,11 +26,13 @@
     "clsx": "^2.1.1",
     "eslint-config-next": "14.2.3",
     "eslint-config-standard": "^17.1.0",
+    "html-react-parser": "^5.1.15",
     "lucide-react": "^0.394.0",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.3",
     "next": "14.2.3",
     "postcss": "8.4.38",
+    "prismjs": "^1.29.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-hook-form": "^7.52.2",
@@ -43,6 +45,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/prismjs": "^1.26.4",
     "@typescript-eslint/parser": "^7.14.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",

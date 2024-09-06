@@ -1,4 +1,8 @@
 import { BADGE_CRITERIA } from "@/constants";
+import { IAnswer } from "@/database/answer.model";
+import { IQuestion } from "@/database/question.model";
+import { ITags } from "@/database/tag.model";
+import { IUser } from "@/database/user.model";
 
 export type Mode = "dark" | "light" | "system";
 
@@ -59,3 +63,13 @@ export interface Question {
 }
 
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA;
+
+export interface PopulatedQuestionById
+    extends Omit<IQuestion, "author" | "tags"> {
+    author: Pick<IUser, "_id" | "clerkId" | "username" | "picture">;
+    tags: Pick<ITags, "_id" | "name">[];
+}
+
+export interface PopulatedAnswer extends Omit<IAnswer, "author"> {
+    author: Pick<IUser, "_id" | "clerkId" | "username" | "picture">;
+}

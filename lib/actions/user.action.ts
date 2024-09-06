@@ -11,7 +11,7 @@ import {
 } from "./shared.types";
 import { revalidatePath } from "next/cache";
 
-export async function getUserById(params: GetUserByIdParams) {
+export async function getUserById(params: GetUserByIdParams): Promise<IUser> {
     try {
         connectToDatabase();
 

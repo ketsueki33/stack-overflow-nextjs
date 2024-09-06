@@ -1,5 +1,5 @@
 import { IUser } from "@/database/user.model";
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 
 export interface CreateAnswerParams {
     content: string;
@@ -9,7 +9,7 @@ export interface CreateAnswerParams {
 }
 
 export interface GetAnswersParams {
-    questionId: string;
+    questionId: Types.ObjectId;
     sortBy?: string;
     page?: number;
     pageSize?: number;
