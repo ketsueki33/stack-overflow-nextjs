@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import RenderTag from "./RenderTag";
+import { Types } from "mongoose";
 
 const tempQuestions = [
     {
@@ -27,27 +28,27 @@ const tempQuestions = [
 
 const tempTags = [
     {
-        _id: "1",
+        _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
         name: "React",
         totalQuestions: 5,
     },
     {
-        _id: "2",
+        _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
         name: "TypeScript",
         totalQuestions: 1,
     },
     {
-        _id: "3",
+        _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
         name: "Python",
         totalQuestions: 2,
     },
     {
-        _id: "4",
+        _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
         name: "Rust",
         totalQuestions: 3,
     },
     {
-        _id: "5",
+        _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
         name: "Tailwind",
         totalQuestions: 8,
     },
@@ -80,7 +81,7 @@ const RightSidebar = () => {
                             showCount
                             name={tag.name}
                             totalQuestions={tag.totalQuestions}
-                            key={tag._id}
+                            key={tag._id.toString()}
                         />
                     ))}
                 </div>

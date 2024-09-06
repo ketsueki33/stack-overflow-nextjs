@@ -1,11 +1,11 @@
-import { Question } from "@/types";
+import { PopulatedQuestion } from "@/types";
 import Link from "next/link";
 import RenderTag from "../shared/RenderTag";
 import Metric from "../shared/Metric";
 import { formatNumber, getTimestamp } from "@/lib/utils";
 
 interface Props {
-    qn: Question;
+    qn: PopulatedQuestion;
 }
 const QuestionCard = ({ qn }: Props) => {
     const timestamp = getTimestamp(qn.createdAt);
@@ -26,7 +26,11 @@ const QuestionCard = ({ qn }: Props) => {
             </div>
             <div className="mt-3.5 flex flex-wrap gap-2">
                 {qn.tags.map((tag) => (
-                    <RenderTag key={tag._id} name={tag.name} _id={tag._id} />
+                    <RenderTag
+                        key={tag._id.toString()}
+                        name={tag.name}
+                        _id={tag._id}
+                    />
                 ))}
             </div>
             <div className="flex-between mt-6 w-full flex-wrap gap-3">
@@ -43,7 +47,7 @@ const QuestionCard = ({ qn }: Props) => {
                     <Metric
                         imgUrl="/assets/icons/like.svg"
                         alt="Upvotes"
-                        value={formatNumber(qn.upvotes)}
+                        value={formatNumber(qn.upvotes.length)}
                         title="Votes"
                         textStyles="small-medium text-dark400_light800"
                     />

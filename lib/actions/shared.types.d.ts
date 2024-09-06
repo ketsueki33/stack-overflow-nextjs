@@ -1,10 +1,10 @@
 import { IUser } from "@/database/user.model";
-import { Schema, Types } from "mongoose";
+import { Types } from "mongoose";
 
 export interface CreateAnswerParams {
     content: string;
-    author: string; // User ID
-    question: string; // Question ID
+    author: Types.ObjectId; // User ID
+    question: Types.ObjectId; // Question ID
     path: string;
 }
 
@@ -61,12 +61,12 @@ export interface CreateQuestionParams {
     title: string;
     content: string;
     tags: string[];
-    author: Schema.Types.ObjectId | IUser;
+    author: Types.ObjectId;
     path: string;
 }
 
 export interface GetQuestionByIdParams {
-    questionId: string;
+    questionId: Types.ObjectId;
 }
 
 export interface QuestionVoteParams {
@@ -105,7 +105,7 @@ export interface GetQuestionsByTagIdParams {
 }
 
 export interface GetTopInteractedTagsParams {
-    userId: string;
+    userId: Types.ObjectId;
     limit?: number;
 }
 

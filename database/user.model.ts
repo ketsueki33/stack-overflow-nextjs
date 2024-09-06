@@ -1,7 +1,7 @@
-import { Schema, models, model, Document } from "mongoose";
+import { Schema, models, model, Types } from "mongoose";
 
-export interface IUser extends Document {
-    _id: string;
+export interface IUser {
+    _id: Types.ObjectId;
     clerkId: string;
     name: string;
     username: string;
@@ -12,7 +12,7 @@ export interface IUser extends Document {
     location?: string;
     portfolioWebsite?: string;
     reputation?: number;
-    saved: Schema.Types.ObjectId[];
+    saved: Types.ObjectId[];
     joinedAt: Date;
 }
 

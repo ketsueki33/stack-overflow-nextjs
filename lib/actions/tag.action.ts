@@ -4,6 +4,7 @@ import User from "@/database/user.model";
 import { connectToDatabase } from "../mongoose";
 import { GetAllTagsParams, GetTopInteractedTagsParams } from "./shared.types";
 import Tag, { ITags } from "@/database/tag.model";
+import { Types } from "mongoose";
 
 export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
     try {
@@ -16,9 +17,18 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
 
         // TODO: Find interactions for the user and group by tags...
         return [
-            { _id: "1", name: "Temp1" },
-            { _id: "2", name: "Temp2" },
-            { _id: "3", name: "Temp3" },
+            {
+                _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
+                name: "Temp1",
+            },
+            {
+                _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
+                name: "Temp2",
+            },
+            {
+                _id: new Types.ObjectId("66c476c6645a75445905ba5d"),
+                name: "Temp3",
+            },
         ];
     } catch (error) {
         console.log(error);

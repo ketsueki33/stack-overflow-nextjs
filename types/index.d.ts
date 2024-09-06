@@ -64,8 +64,7 @@ export interface Question {
 
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA;
 
-export interface PopulatedQuestionById
-    extends Omit<IQuestion, "author" | "tags"> {
+export interface PopulatedQuestion extends Omit<IQuestion, "author" | "tags"> {
     author: Pick<IUser, "_id" | "clerkId" | "username" | "picture">;
     tags: Pick<ITags, "_id" | "name">[];
 }

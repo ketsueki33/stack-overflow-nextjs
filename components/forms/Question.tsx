@@ -27,6 +27,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
+import { Types } from "mongoose";
 
 require("prismjs/components/prism-python");
 require("prismjs/components/prism-java");
@@ -53,7 +54,7 @@ require("prismjs/components/prism-javascript");
 require("prismjs/components/prism-css");
 
 interface Props {
-    mongoUserId: string;
+    mongoUserId: Types.ObjectId;
     purpose?: "edit" | "post";
 }
 
@@ -87,7 +88,7 @@ const Question = ({ mongoUserId, purpose = "post" }: Props) => {
                 title: values.title,
                 content: values.explanation,
                 tags: values.tags,
-                author: JSON.parse(mongoUserId),
+                author: mongoUserId,
                 path: pathname,
             });
 

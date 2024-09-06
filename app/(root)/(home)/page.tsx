@@ -9,7 +9,7 @@ import { getQuestions } from "@/lib/actions/question.action";
 import Link from "next/link";
 
 const Home = async () => {
-    const result = await getQuestions({});
+    const questions = await getQuestions({});
 
     return (
         <>
@@ -34,9 +34,9 @@ const Home = async () => {
             </div>
 
             <div className="mt-10 flex w-full flex-col gap-6">
-                {result.questions.length > 0 ? (
-                    result.questions.map((qn) => {
-                        return <QuestionCard key={qn._id} qn={qn} />;
+                {questions.length > 0 ? (
+                    questions.map((qn) => {
+                        return <QuestionCard key={qn._id.toString()} qn={qn} />;
                     })
                 ) : (
                     <NoResult

@@ -10,9 +10,11 @@ import {
 } from "./shared.types";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
-import { PopulatedQuestionById } from "@/types";
+import { PopulatedQuestion } from "@/types";
 
-export async function getQuestions(params: GetQuestionsParams) {
+export async function getQuestions(
+    params: GetQuestionsParams,
+): Promise<PopulatedQuestion[]> {
     try {
         connectToDatabase();
 
@@ -20,11 +22,16 @@ export async function getQuestions(params: GetQuestionsParams) {
             .populate({
                 path: "tags",
                 model: Tag,
+                select: "name _id",
             })
-            .populate({ path: "author", model: User })
+            .populate({
+                path: "author",
+                model: User,
+                select: "clerkId _id picture username",
+            })
             .sort({ createdAt: -1 });
 
-        return { questions };
+        return questions;
     } catch (error) {
         console.log(error);
         throw error;
@@ -73,7 +80,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 
 export async function getQuestionById(
     params: GetQuestionByIdParams,
-): Promise<PopulatedQuestionById> {
+): Promise<PopulatedQuestion> {
     try {
         connectToDatabase();
         const { questionId } = params;

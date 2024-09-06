@@ -9,6 +9,7 @@ import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatNumber, getTimestamp } from "@/lib/utils";
 import { auth } from "@clerk/nextjs/server";
+import { Types } from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -16,7 +17,9 @@ interface Props {
     params: { id: string };
 }
 const Page = async ({ params }: Props) => {
-    const question = await getQuestionById({ questionId: params.id });
+    const question = await getQuestionById({
+        questionId: new Types.ObjectId(params.id),
+    });
     const { userId: clerkId } = auth();
 
     let mongoUser: IUser | undefined;
@@ -76,7 +79,11 @@ const Page = async ({ params }: Props) => {
             <ParseHTML data={question.content} />
             <div className="mt-8 flex flex-wrap gap-4">
                 {question.tags.map((tag) => (
-                    <RenderTag key={tag._id} name={tag.name} _id={tag._id} />
+                    <RenderTag
+                        key={tag._id.toString()}
+                        name={tag.name}
+                        _id={tag._id}
+                    />
                 ))}
             </div>
 
@@ -86,10 +93,7 @@ const Page = async ({ params }: Props) => {
                 totalAnswers={question.answers.length}
             />
             {mongoUser ? (
-                <Answer
-                    questionId={JSON.stringify(question._id)}
-                    userId={JSON.stringify(mongoUser._id)}
-                />
+                <Answer questionId={question._id} userId={mongoUser._id} />
             ) : (
                 <div className="mt-5 flex w-full justify-end">
                     <Link href="/sign-in">

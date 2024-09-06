@@ -21,6 +21,7 @@ import { usePathname } from "next/navigation";
 
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
+import { Types } from "mongoose";
 
 require("prismjs/components/prism-python");
 require("prismjs/components/prism-java");
@@ -47,8 +48,8 @@ require("prismjs/components/prism-javascript");
 require("prismjs/components/prism-css");
 
 interface Props {
-    userId: string;
-    questionId: string;
+    userId: Types.ObjectId;
+    questionId: Types.ObjectId;
 }
 
 export const Answer = ({ questionId, userId }: Props) => {
@@ -77,9 +78,9 @@ export const Answer = ({ questionId, userId }: Props) => {
         try {
             await createAnswer({
                 content: values.answer,
-                author: JSON.parse(userId),
+                author: userId,
                 path,
-                question: JSON.parse(questionId),
+                question: questionId,
             });
 
             form.reset();

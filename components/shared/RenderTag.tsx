@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Badge } from "../ui/badge";
+import { Types } from "mongoose";
 
 interface Props {
-    _id: string;
+    _id: Types.ObjectId;
     name: string;
     showCount?: boolean;
     totalQuestions?: number;
@@ -10,7 +11,7 @@ interface Props {
 
 const RenderTag = ({ _id, name, showCount = false, totalQuestions }: Props) => {
     return (
-        <Link href={`/tags/${_id}`}>
+        <Link href={`/tags/${_id.toString()}`}>
             <Badge
                 variant="secondary"
                 className="small-medium px-3 py-1 uppercase"

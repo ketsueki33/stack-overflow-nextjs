@@ -25,7 +25,7 @@ const Tags = async () => {
             <section className="mt-12 grid grid-cols-1 gap-4 min-[460px]:grid-cols-2 min-[1100px]:grid-cols-3 xl:grid-cols-2 2xl:grid-cols-3">
                 {results.tags.length > 0 ? (
                     results.tags.map((tag) => (
-                        <TagCard key={tag._id} tag={tag} />
+                        <TagCard key={tag._id.toString()} tag={tag} />
                         // <UserCard key={tag._id} user={tag} />
                     ))
                 ) : (
