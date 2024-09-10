@@ -25,12 +25,12 @@ const TagCard = async ({ tag }: Props) => {
                     </Badge>
                 </div>
                 <p className="body-regular mt-4 text-justify">
-                    {tag.description.length > 2 ? (
+                    {tag.description ? (
                         tag.description
                     ) : (
-                        <p className="text-gray-500">
+                        <span className="italic text-gray-500">
                             Description not added yet
-                        </p>
+                        </span>
                     )}
                 </p>
             </div>
