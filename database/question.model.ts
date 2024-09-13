@@ -4,12 +4,12 @@ export interface IQuestion {
     _id: Types.ObjectId;
     title: string;
     content: string;
-    tags: Schema.Types.ObjectId[];
+    tags: Types.ObjectId[];
     views: number;
-    upvotes: Schema.Types.ObjectId[];
-    downvotes: Schema.Types.ObjectId[];
-    author: Schema.Types.ObjectId;
-    answers: Schema.Types.ObjectId[];
+    upvotes: Types.ObjectId[];
+    downvotes: Types.ObjectId[];
+    author: Types.ObjectId;
+    answers: Types.ObjectId[];
     createdAt: Date;
 }
 

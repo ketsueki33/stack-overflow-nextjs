@@ -3,6 +3,7 @@ import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Metric";
 import { ParseHTML } from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 import { Button } from "@/components/ui/button";
 import { IUser } from "@/database/user.model";
 import { getQuestionById } from "@/lib/actions/question.action";
@@ -47,7 +48,26 @@ const Page = async ({ params }: Props) => {
                             {question.author.username}
                         </p>
                     </Link>
-                    <div className="flex justify-end"> (VOTING)</div>
+                    <div className="flex justify-end">
+                        <Votes
+                            type="question"
+                            itemId={question._id.toString()}
+                            userId={mongoUser?._id.toString()}
+                            hasUpvoted={
+                                mongoUser
+                                    ? question.upvotes.includes(mongoUser._id)
+                                    : false
+                            }
+                            hasDownvoted={
+                                mongoUser
+                                    ? question.downvotes.includes(mongoUser._id)
+                                    : false
+                            }
+                            upvotes={question.upvotes.length}
+                            downvotes={question.downvotes.length}
+                            hasSaved={mongoUser?.saved.includes(question._id)}
+                        />
+                    </div>
                 </div>
                 <h2 className="h2-semibold text-dark200_light900 mt-3.5">
                     {question.title}
@@ -88,12 +108,15 @@ const Page = async ({ params }: Props) => {
             </div>
 
             <AllAnswers
-                questionId={question._id}
-                userId={JSON.stringify(mongoUser?._id)}
+                questionId={question._id.toString()}
+                userId={mongoUser?._id.toString()}
                 totalAnswers={question.answers.length}
             />
             {mongoUser ? (
-                <Answer questionId={question._id} userId={mongoUser._id} />
+                <Answer
+                    questionId={question._id.toString()}
+                    userId={mongoUser._id.toString()}
+                />
             ) : (
                 <div className="mt-5 flex w-full justify-end">
                     <Link href="/sign-in">

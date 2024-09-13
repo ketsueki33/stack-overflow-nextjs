@@ -3,13 +3,13 @@ import { Types } from "mongoose";
 
 export interface CreateAnswerParams {
     content: string;
-    author: Types.ObjectId; // User ID
-    question: Types.ObjectId; // Question ID
+    author: Types.ObjectId | string; // User ID
+    question: Types.ObjectId | string; // Question ID
     path: string;
 }
 
 export interface GetAnswersParams {
-    questionId: Types.ObjectId;
+    questionId: Types.ObjectId | string;
     sortBy?: string;
     page?: number;
     pageSize?: number;
@@ -18,8 +18,8 @@ export interface GetAnswersParams {
 export interface AnswerVoteParams {
     answerId: string;
     userId: string;
-    hasupVoted: boolean;
-    hasdownVoted: boolean;
+    hasUpvoted: boolean;
+    hasDownvoted: boolean;
     path: string;
 }
 
@@ -72,8 +72,8 @@ export interface GetQuestionByIdParams {
 export interface QuestionVoteParams {
     questionId: string;
     userId: string;
-    hasupVoted: boolean;
-    hasdownVoted: boolean;
+    hasUpvoted: boolean;
+    hasDownvoted: boolean;
     path: string;
 }
 

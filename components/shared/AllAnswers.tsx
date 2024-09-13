@@ -1,15 +1,16 @@
 import { AnswerFilters } from "@/constants/filters";
 import Filter from "./Filter";
 import { getAnswers } from "@/lib/actions/answer.action";
-import { Types } from "mongoose";
 import Link from "next/link";
 import Image from "next/image";
 import { getTimestamp } from "@/lib/utils";
 import { ParseHTML } from "./ParseHTML";
+import Votes from "./Votes";
+import { Types } from "mongoose";
 
 interface Props {
-    questionId: Types.ObjectId;
-    userId: string;
+    questionId: string;
+    userId: string | undefined;
     totalAnswers: number;
     page?: number;
     filter?: number;
@@ -17,6 +18,11 @@ interface Props {
 
 const AllAnswers = async ({ questionId, userId, totalAnswers }: Props) => {
     const answers = await getAnswers({ questionId });
+
+    const result = answers[1].upvotes.includes(new Types.ObjectId(userId));
+    const result2 = answers[1].upvotes.length;
+    console.log({ result, result2 });
+
     return (
         <div className="mt-11">
             <div className="flex items-center justify-between">
@@ -55,7 +61,24 @@ const AllAnswers = async ({ questionId, userId, totalAnswers }: Props) => {
                                         </p>
                                     </div>
                                 </Link>
-                                <div className="flex justify-end">VOTING</div>
+                                <div className="flex justify-end">
+                                    <Votes
+                                        type="answer"
+                                        itemId={answer._id.toString()}
+                                        userId={userId}
+                                        hasUpvoted={answer.upvotes.some(
+                                            (upvoteId) =>
+                                                upvoteId.toString() === userId,
+                                        )}
+                                        hasDownvoted={answer.downvotes.some(
+                                            (downvoteId) =>
+                                                downvoteId.toString() ===
+                                                userId,
+                                        )}
+                                        upvotes={answer.upvotes.length}
+                                        downvotes={answer.downvotes.length}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <ParseHTML data={answer.content} />

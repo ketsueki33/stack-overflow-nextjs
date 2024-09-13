@@ -21,7 +21,6 @@ import { usePathname } from "next/navigation";
 
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
-import { Types } from "mongoose";
 
 require("prismjs/components/prism-python");
 require("prismjs/components/prism-java");
@@ -48,8 +47,8 @@ require("prismjs/components/prism-javascript");
 require("prismjs/components/prism-css");
 
 interface Props {
-    userId: Types.ObjectId;
-    questionId: Types.ObjectId;
+    userId: string;
+    questionId: string;
 }
 
 export const Answer = ({ questionId, userId }: Props) => {
