@@ -26,7 +26,7 @@ const NoResult = ({ title, description, linkTo, linkTitle }: Props) => {
             <h2 className="h2-bold text-dark200_light900 mt-8 text-center">
                 {title}
             </h2>
-            <p className="body-regular text-dark500_light700 my-2.5 max-w-md text-center">
+            <p className="body-regular text-dark500_light700 my-2.5 max-w-md text-pretty text-center">
                 {description}
             </p>
             <Link href={linkTo}>

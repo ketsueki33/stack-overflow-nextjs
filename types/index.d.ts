@@ -51,17 +51,6 @@ export interface BadgeCounts {
     BRONZE: number;
 }
 
-export interface Question {
-    _id: string;
-    title: string;
-    tags: { _id: string; name: string }[];
-    upvotes: number;
-    views: number;
-    answers: string[];
-    createdAt: Date;
-    author: { _id: string; name: string; picture: string; username: string };
-}
-
 export type BadgeCriteriaType = keyof typeof BADGE_CRITERIA;
 
 export interface PopulatedQuestion extends Omit<IQuestion, "author" | "tags"> {
@@ -71,4 +60,8 @@ export interface PopulatedQuestion extends Omit<IQuestion, "author" | "tags"> {
 
 export interface PopulatedAnswer extends Omit<IAnswer, "author"> {
     author: Pick<IUser, "_id" | "clerkId" | "username" | "picture">;
+}
+
+export interface UserWithPopulatedQuestions extends Omit<IUser, "saved"> {
+    saved: PopulatedQuestion[];
 }

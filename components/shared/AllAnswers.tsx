@@ -6,7 +6,6 @@ import Image from "next/image";
 import { getTimestamp } from "@/lib/utils";
 import { ParseHTML } from "./ParseHTML";
 import Votes from "./Votes";
-import { Types } from "mongoose";
 
 interface Props {
     questionId: string;
@@ -18,10 +17,6 @@ interface Props {
 
 const AllAnswers = async ({ questionId, userId, totalAnswers }: Props) => {
     const answers = await getAnswers({ questionId });
-
-    const result = answers[1].upvotes.includes(new Types.ObjectId(userId));
-    const result2 = answers[1].upvotes.length;
-    console.log({ result, result2 });
 
     return (
         <div className="mt-11">

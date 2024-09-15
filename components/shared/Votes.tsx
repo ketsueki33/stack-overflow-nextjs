@@ -1,13 +1,16 @@
 "use client";
 
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
     downvoteQuestion,
     upvoteQuestion,
 } from "@/lib/actions/question.action";
+import { toggleSaveQuestion } from "@/lib/actions/user.action";
 import { formatNumber } from "@/lib/utils";
 import { ArrowBigDown, ArrowBigUp, Bookmark } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 interface Props {
     type: "question" | "answer";
@@ -30,8 +33,24 @@ const Votes = ({
     hasSaved,
 }: Props) => {
     const pathname = usePathname();
-    const handleSave = () => {
-        // TODO: write server action for saving questions
+    const router = useRouter();
+
+    useEffect(() => {
+        if (type === "question") viewQuestion({ questionId: itemId, userId });
+    }, [itemId, userId, pathname, router, type]);
+
+    const handleSave = async () => {
+        if (!userId) {
+            alert("YOU MUST BE SIGNED IN"); // REVIEW:
+            return;
+        }
+        // TODO: call toaster to let user log in
+
+        await toggleSaveQuestion({
+            userId,
+            questionId: itemId,
+            path: pathname,
+        });
     };
 
     const handleVote = async (action: "upvote" | "downvote") => {
