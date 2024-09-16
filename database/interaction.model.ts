@@ -23,4 +23,3 @@ const Interaction =
     models.Interaction || model("Interaction", InteractionSchema);
 
 export default Interaction;
- 

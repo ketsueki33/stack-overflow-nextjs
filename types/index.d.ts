@@ -65,3 +65,7 @@ export interface PopulatedAnswer extends Omit<IAnswer, "author"> {
 export interface UserWithPopulatedQuestions extends Omit<IUser, "saved"> {
     saved: PopulatedQuestion[];
 }
+
+export interface TagWithPopulatedQuestions extends Omit<ITags, "questions"> {
+    questions: PopulatedQuestion[];
+}

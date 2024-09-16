@@ -42,7 +42,7 @@ const Home = async () => {
                     <NoResult
                         title="There are no questions to show"
                         description="Be the first to break the silence! 🚀 Ask a Question and
-                kickstart the discussion. our query could be the next big thing
+                kickstart the discussion. your query could be the next big thing
                 others learn from. Get involved! 💡"
                         linkTitle="Ask a Question"
                         linkTo="/ask-a-question"
