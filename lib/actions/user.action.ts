@@ -1,8 +1,13 @@
 "use server";
 
+import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import User, { IUser } from "@/database/user.model";
-import { UserWithPopulatedQuestions } from "@/types";
+import {
+    PopulatedAnswerWithQuestionTitle,
+    PopulatedQuestion,
+    UserWithPopulatedQuestions
+} from "@/types";
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "../mongoose";
@@ -12,6 +17,7 @@ import {
     GetAllUsersParams,
     GetSavedQuestionsParams,
     GetUserByIdParams,
+    GetUserStatsParams,
     ToggleSaveQuestionParams,
     UpdateUserParams,
 } from "./shared.types";
@@ -179,6 +185,70 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
         const savedQuestions = user.saved;
 
         return savedQuestions;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function getUserInfo(params: GetUserByIdParams) {
+    try {
+        connectToDatabase();
+
+        const { userId } = params;
+
+        const user = await User.findOne({ clerkId: userId }).lean<IUser>();
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        const totalQuestions = await Question.countDocuments({
+            author: user._id,
+        });
+        const totalAnswers = await Answer.countDocuments({
+            author: user._id,
+        });
+
+        return { user, totalAnswers, totalQuestions };
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function getUserQuestions(params: GetUserStatsParams) {
+    try {
+        connectToDatabase();
+
+        const { userId, page = 1, pageSize = 10 } = params;
+
+        const userQuestions = await Question.find({ author: userId })
+            .sort({ views: -1, upvotes: -1 })
+            .populate("tags", "_id name")
+            .populate("author", "_id clerkId username picture")
+            .lean<PopulatedQuestion[]>();
+
+        return userQuestions;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function getUserAnswers(params: GetUserStatsParams) {
+    try {
+        connectToDatabase();
+
+        const { userId, page = 1, pageSize = 10 } = params;
+
+        const userAnswers = await Answer.find({ author: userId })
+            .sort({ upvotes: -1 })
+            .populate("author", "_id clerkId username picture")
+            .populate("question", "_id title")
+            .lean<PopulatedAnswerWithQuestionTitle[]>();
+
+        return userAnswers;
     } catch (error) {
         console.log(error);
         throw error;

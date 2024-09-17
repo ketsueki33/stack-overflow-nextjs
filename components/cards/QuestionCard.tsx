@@ -6,8 +6,9 @@ import { formatNumber, getTimestamp } from "@/lib/utils";
 
 interface Props {
     qn: PopulatedQuestion;
+    clerkId?: string | null;
 }
-const QuestionCard = ({ qn }: Props) => {
+const QuestionCard = ({ qn, clerkId }: Props) => {
     const timestamp = getTimestamp(qn.createdAt);
     return (
         <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
@@ -39,7 +40,7 @@ const QuestionCard = ({ qn }: Props) => {
                     alt="User"
                     value={qn.author.username}
                     title={"- asked " + timestamp}
-                    href={`/profile/${qn.author._id}`}
+                    href={`/profile/${qn.author.clerkId}`}
                     isAuthor
                     textStyles="body-medium text-dark400_light700"
                 />

@@ -62,6 +62,11 @@ export interface PopulatedAnswer extends Omit<IAnswer, "author"> {
     author: Pick<IUser, "_id" | "clerkId" | "username" | "picture">;
 }
 
+export interface PopulatedAnswerWithQuestionTitle
+    extends Omit<PopulatedAnswer, "question"> {
+    question: Pick<IQuestion, "_id" | "title">;
+}
+
 export interface UserWithPopulatedQuestions extends Omit<IUser, "saved"> {
     saved: PopulatedQuestion[];
 }
