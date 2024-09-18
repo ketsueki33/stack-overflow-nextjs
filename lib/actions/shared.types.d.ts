@@ -61,12 +61,12 @@ export interface CreateQuestionParams {
     title: string;
     content: string;
     tags: string[];
-    author: Types.ObjectId;
+    author: string;
     path: string;
 }
 
 export interface GetQuestionByIdParams {
-    questionId: Types.ObjectId;
+    questionId: string;
 }
 
 export interface QuestionVoteParams {
@@ -86,8 +86,6 @@ export interface EditQuestionParams {
     questionId: string;
     title: string;
     content: string;
-    tags: string[];
-    path: string;
 }
 
 export interface GetAllTagsParams {
@@ -132,6 +130,7 @@ export interface UpdateUserParams {
     clerkId: string;
     updateData: Partial<IUser>;
     path: string;
+    fromClerk: boolean;
 }
 
 export interface ToggleSaveQuestionParams {

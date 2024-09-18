@@ -96,6 +96,7 @@ export async function POST(req: Request) {
                 picture: image_url,
             },
             path: `profile/${id}`,
+            fromClerk: true,
         });
 
         return NextResponse.json({ message: "OK", user: mongoUser });

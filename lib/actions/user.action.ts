@@ -1,12 +1,15 @@
 "use server";
 
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import Answer from "@/database/answer.model";
 import Question from "@/database/question.model";
 import User, { IUser } from "@/database/user.model";
+import "@/database/tag.model";
+
 import {
     PopulatedAnswerWithQuestionTitle,
     PopulatedQuestion,
-    UserWithPopulatedQuestions
+    UserWithPopulatedQuestions,
 } from "@/types";
 import { FilterQuery } from "mongoose";
 import { revalidatePath } from "next/cache";
@@ -21,6 +24,27 @@ import {
     ToggleSaveQuestionParams,
     UpdateUserParams,
 } from "./shared.types";
+
+export const isUsernameAvailable = async (
+    username: string,
+): Promise<boolean> => {
+    const { userId } = auth();
+    try {
+        const users = await clerkClient.users.getUserList({
+            username: [username],
+        });
+
+        if (users.totalCount === 0) return true;
+
+        const user = users.data[0];
+        if (user.id === userId) return true;
+
+        return false;
+    } catch (error) {
+        console.error("Error checking username availability:", error);
+        throw error;
+    }
+};
 
 export async function getUserById(params: GetUserByIdParams): Promise<IUser> {
     try {
@@ -54,13 +78,31 @@ export async function updateUser(params: UpdateUserParams) {
     try {
         connectToDatabase();
 
-        const { clerkId, updateData, path } = params;
+        const { clerkId, updateData, path, fromClerk } = params;
 
-        const user = await User.findOneAndUpdate({ clerkId }, updateData);
+        if (!fromClerk) {
+            await clerkClient.users.updateUser(clerkId, {
+                username: updateData.username,
+                firstName: updateData.name?.split(" ")[0],
+                lastName: updateData.name?.split(" ").slice(1).join(" "),
+            });
+        }
+
+        const user = await User.findOneAndUpdate(
+            { clerkId },
+            updateData,
+        ).lean<IUser>();
 
         revalidatePath(path);
 
-        return user;
+        return {
+            _id: user?._id.toString(),
+            name: user?.name,
+            username: user?.username,
+            bio: user?.bio,
+            location: user?.location,
+            portfolioWebsite: user?.portfolioWebsite,
+        };
     } catch (error) {
         console.log(error);
         throw error;

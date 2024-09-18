@@ -3,12 +3,16 @@ import Link from "next/link";
 import RenderTag from "../shared/RenderTag";
 import Metric from "../shared/Metric";
 import { formatNumber, getTimestamp } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
+import EditDeleteAction from "../shared/EditDeleteAction";
 
 interface Props {
     qn: PopulatedQuestion;
     clerkId?: string | null;
 }
 const QuestionCard = ({ qn, clerkId }: Props) => {
+    const showActionButtons = (clerkId &&
+        clerkId === qn.author.clerkId) as boolean;
     const timestamp = getTimestamp(qn.createdAt);
     return (
         <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
@@ -23,7 +27,14 @@ const QuestionCard = ({ qn, clerkId }: Props) => {
                         </h3>
                     </Link>
                 </div>
-                {/* TODO: If signed in add edit & delete actions */}
+                <SignedIn>
+                    {showActionButtons && (
+                        <EditDeleteAction
+                            type="question"
+                            itemId={qn._id.toString()}
+                        />
+                    )}
+                </SignedIn>
             </div>
             <div className="mt-3.5 flex flex-wrap gap-2">
                 {qn.tags.map((tag) => (

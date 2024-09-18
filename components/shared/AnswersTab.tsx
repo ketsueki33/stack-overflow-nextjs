@@ -25,7 +25,7 @@ const AnswersTab = async ({ searchParams, userId, clerkId }: Props) => {
                     })
                 ) : (
                     <p className="italic text-gray-500">
-                        You have not posted any questions yet...
+                        You have not answered any questions yet...
                     </p>
                 )}
             </div>

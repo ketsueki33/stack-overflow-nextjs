@@ -5,6 +5,8 @@ import { connectToDatabase } from "../mongoose";
 import Tag from "@/database/tag.model";
 import {
     CreateQuestionParams,
+    DeleteQuestionParams,
+    EditQuestionParams,
     GetQuestionByIdParams,
     GetQuestionsParams,
     QuestionVoteParams,
@@ -12,6 +14,8 @@ import {
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import { PopulatedQuestion } from "@/types";
+import Answer from "@/database/answer.model";
+import Interaction from "@/database/interaction.model";
 
 export async function getQuestions(
     params: GetQuestionsParams,
@@ -179,4 +183,50 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
         console.log(error);
         throw error;
     }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+    try {
+        connectToDatabase();
+        const { questionId, path } = params;
+
+        await Promise.all([
+            await Question.deleteOne({ _id: questionId }),
+            await Answer.deleteMany({ question: questionId }),
+            await Interaction.deleteMany({ question: questionId }),
+            await Tag.updateMany(
+                { questions: questionId },
+                { $pull: { questions: questionId } },
+            ),
+            await User.updateMany(
+                { saved: questionId },
+                { $pull: { saved: questionId } },
+            ),
+        ]);
+
+        revalidatePath(path);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export async function editQuestion(params: EditQuestionParams) {
+    try {
+        connectToDatabase();
+
+        const { questionId, title, content } = params;
+
+        const question = await Question.findById(questionId);
+
+        if (!question) throw new Error("Question not found");
+
+        question.title = title;
+        question.content = content;
+
+        await question.save();
+
+        // TODO: Create an interaction record for user's ask question action
+        // TODO: Incremenet author's reputation by +5 for creating a question
+    } catch (error) {}
 }

@@ -21,13 +21,13 @@ import { Editor } from "@tinymce/tinymce-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useTheme } from "@/context/ThemeProvider";
 import { Badge } from "../ui/badge";
-import Image from "next/image";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { usePathname, useRouter } from "next/navigation";
 
 import Prism from "prismjs";
 import "prismjs/themes/prism-tomorrow.css";
-import { Types } from "mongoose";
+import { PopulatedQuestion } from "@/types";
+import { X } from "lucide-react";
 
 require("prismjs/components/prism-python");
 require("prismjs/components/prism-java");
@@ -54,11 +54,16 @@ require("prismjs/components/prism-javascript");
 require("prismjs/components/prism-css");
 
 interface Props {
-    mongoUserId: Types.ObjectId;
+    mongoUserId: string;
     purpose?: "edit" | "post";
+    questionDetails?: string;
 }
 
-const Question = ({ mongoUserId, purpose = "post" }: Props) => {
+const Question = ({
+    mongoUserId,
+    purpose = "post",
+    questionDetails,
+}: Props) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const editorRef = useRef(null);
@@ -68,31 +73,45 @@ const Question = ({ mongoUserId, purpose = "post" }: Props) => {
     const router = useRouter();
     const pathname = usePathname();
 
+    const parsedQn = questionDetails
+        ? (JSON.parse(questionDetails) as PopulatedQuestion)
+        : undefined;
+
+    const groupedTags = parsedQn?.tags.map((tag) => tag.name);
+
     const form = useForm<z.infer<typeof QuestionsSchema>>({
         resolver: zodResolver(QuestionsSchema),
         defaultValues: {
-            title: "",
-            explanation: "",
-            tags: [],
+            title: parsedQn?.title || "",
+            explanation: parsedQn?.content || "",
+            tags: groupedTags || [],
         },
     });
 
-    // 2. Define a submit handler.
     async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
         setIsSubmitting(true);
         console.log(values);
         console.log("trigger");
 
         try {
-            await createQuestion({
-                title: values.title,
-                content: values.explanation,
-                tags: values.tags,
-                author: mongoUserId,
-                path: pathname,
-            });
+            if (purpose === "post") {
+                await createQuestion({
+                    title: values.title,
+                    content: values.explanation,
+                    tags: values.tags,
+                    author: mongoUserId,
+                    path: pathname,
+                });
 
-            router.push("/");
+                router.push("/");
+            } else {
+                await editQuestion({
+                    questionId: parsedQn!._id.toString(),
+                    title: values.title,
+                    content: values.explanation,
+                });
+                router.push(`/question/${parsedQn!._id.toString()}`);
+            }
         } catch (error) {
         } finally {
             setIsSubmitting(false);
@@ -191,7 +210,7 @@ const Question = ({ mongoUserId, purpose = "post" }: Props) => {
                                     onEditorChange={(content) =>
                                         field.onChange(content)
                                     }
-                                    initialValue=""
+                                    initialValue={parsedQn?.content || ""}
                                     init={{
                                         height: 360,
                                         skin:
@@ -302,6 +321,7 @@ const Question = ({ mongoUserId, purpose = "post" }: Props) => {
                             </FormLabel>
                             <FormControl className="!mt-3.5">
                                 <Input
+                                    disabled={purpose === "edit"}
                                     onKeyDown={(e) =>
                                         handleInputKeyDown(e, field)
                                     }
@@ -309,7 +329,7 @@ const Question = ({ mongoUserId, purpose = "post" }: Props) => {
                                 />
                             </FormControl>
                             {field.value.length > 0 && (
-                                <div className="!mt-4 flex gap-2.5">
+                                <div className="!mt-4 flex items-center gap-2.5">
                                     {field.value.map((tag) => (
                                         <Badge
                                             key={tag}
@@ -317,26 +337,36 @@ const Question = ({ mongoUserId, purpose = "post" }: Props) => {
                                             className="small-medium flex-center px-3 py-1 uppercase"
                                         >
                                             {tag}
-                                            <Image
-                                                src="/assets/icons/close.svg"
-                                                alt="Delete Tag"
-                                                width={12}
-                                                height={12}
-                                                className="ml-1 cursor-pointer object-contain invert-0 dark:invert"
-                                                onClick={() =>
-                                                    handleTagRemove(tag, field)
-                                                }
-                                            />
+                                            {purpose === "post" && (
+                                                <X
+                                                    size={14}
+                                                    strokeWidth={3}
+                                                    className="ml-1 cursor-pointer hover:text-red-500"
+                                                    onClick={() =>
+                                                        handleTagRemove(
+                                                            tag,
+                                                            field,
+                                                        )
+                                                    }
+                                                />
+                                            )}
                                         </Badge>
                                     ))}
                                 </div>
                             )}
                             <FormDescription className="body-regular !mt-3 text-light-500">
-                                Add up to 3 tags to describe what your question
-                                is about.
-                                <span className="font-bold text-primary-500">
-                                    You need to press enter to add a tag.
-                                </span>
+                                {purpose === "post" ? (
+                                    <>
+                                        Add up to 3 tags to describe what your
+                                        question is about.
+                                        <span className="font-bold text-primary-500">
+                                            You need to press enter to add a
+                                            tag.
+                                        </span>
+                                    </>
+                                ) : (
+                                    "Tags can not be edited"
+                                )}
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

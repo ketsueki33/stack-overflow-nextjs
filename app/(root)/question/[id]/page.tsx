@@ -1,5 +1,6 @@
 import { Answer } from "@/components/forms/Answer";
 import AllAnswers from "@/components/shared/AllAnswers";
+import EditDeleteAction from "@/components/shared/EditDeleteAction";
 import Metric from "@/components/shared/Metric";
 import { ParseHTML } from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
@@ -9,8 +10,8 @@ import { IUser } from "@/database/user.model";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatNumber, getTimestamp } from "@/lib/utils";
+import { SignedIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
-import { Types } from "mongoose";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -19,9 +20,12 @@ interface Props {
 }
 const Page = async ({ params }: Props) => {
     const question = await getQuestionById({
-        questionId: new Types.ObjectId(params.id),
+        questionId: params.id,
     });
     const { userId: clerkId } = auth();
+
+    const showActionButtons = (clerkId &&
+        clerkId === question.author.clerkId) as boolean;
 
     let mongoUser: IUser | undefined;
 
@@ -97,16 +101,26 @@ const Page = async ({ params }: Props) => {
                 </div>
             </div>
             <ParseHTML data={question.content} />
-            <div className="mt-8 flex flex-wrap gap-4">
-                {question.tags.map((tag) => (
-                    <RenderTag
-                        key={tag._id.toString()}
-                        name={tag.name}
-                        _id={tag._id}
-                    />
-                ))}
+            <div className="mt-8 flex items-center justify-between">
+                <div className="flex flex-wrap gap-4">
+                    {question.tags.map((tag) => (
+                        <RenderTag
+                            key={tag._id.toString()}
+                            name={tag.name}
+                            _id={tag._id}
+                        />
+                    ))}
+                </div>
+                <SignedIn>
+                    {showActionButtons && (
+                        <EditDeleteAction
+                            type="question"
+                            itemId={question._id.toString()}
+                            size={18}
+                        />
+                    )}
+                </SignedIn>
             </div>
-
             <AllAnswers
                 questionId={question._id.toString()}
                 userId={mongoUser?._id.toString()}
