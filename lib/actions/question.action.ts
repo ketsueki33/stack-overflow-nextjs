@@ -230,3 +230,22 @@ export async function editQuestion(params: EditQuestionParams) {
         // TODO: Incremenet author's reputation by +5 for creating a question
     } catch (error) {}
 }
+
+export async function getHotQuestions() {
+    try {
+        connectToDatabase();
+
+        const hotQuestions = await Question.find({})
+            .sort({
+                views: -1,
+                upvotes: -1,
+            })
+            .limit(5)
+            .lean<IQuestion[]>();
+
+        return hotQuestions;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
