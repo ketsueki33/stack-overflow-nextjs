@@ -6,7 +6,6 @@ import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
-import console from "console";
 
 const Collection = async ({ searchParams }: SearchParamsProps) => {
     const { userId } = auth();
@@ -24,6 +23,7 @@ const Collection = async ({ searchParams }: SearchParamsProps) => {
     const questions = await getSavedQuestions({
         clerkId: userId,
         searchQuery: searchParams.q,
+        filter: searchParams.filter,
     });
 
     const isSearching = Boolean(searchParams.q || searchParams.filter);

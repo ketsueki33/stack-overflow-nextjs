@@ -43,11 +43,33 @@ export async function getAnswers(
     try {
         connectToDatabase();
 
-        const { questionId } = params;
+        const { questionId, sortBy } = params;
+
+        let sortOptions = {};
+
+        switch (sortBy) {
+            case "highest_upvotes":
+                sortOptions = { upvotes: -1 };
+                break;
+            case "lowest_upvotes":
+                sortOptions = { upvotes: 1 };
+                break;
+            case "recent":
+                sortOptions = { createdAt: -1 };
+                break;
+            case "old":
+                sortOptions = { createdAt: 1 };
+                break;
+            case "controversial":
+                sortOptions = { downvotes: -1 };
+                break;
+            default:
+                break;
+        }
 
         const answers = await Answer.find({ question: questionId })
             .populate("author", "_id clerkId username picture")
-            .sort({ createdAt: -1 })
+            .sort(sortOptions)
             .lean<PopulatedAnswer[]>();
 
         return answers;

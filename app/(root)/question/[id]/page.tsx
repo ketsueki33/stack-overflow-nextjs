@@ -10,15 +10,16 @@ import { IUser } from "@/database/user.model";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { formatNumber, getTimestamp } from "@/lib/utils";
+import { URLProps } from "@/types";
 import { SignedIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Props {
-    params: { id: string };
-}
-const Page = async ({ params }: Props) => {
+// interface Props {
+//     params: { id: string };
+// }
+const Page = async ({ params, searchParams }: URLProps) => {
     const question = await getQuestionById({
         questionId: params.id,
     });
@@ -125,6 +126,8 @@ const Page = async ({ params }: Props) => {
                 questionId={question._id.toString()}
                 userId={mongoUser?._id.toString()}
                 totalAnswers={question.answers.length}
+                page={parseInt(searchParams?.page || "1")}
+                filter={searchParams?.filter}
             />
             {mongoUser ? (
                 <Answer

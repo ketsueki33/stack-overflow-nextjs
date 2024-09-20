@@ -7,7 +7,10 @@ import { getAllTags } from "@/lib/actions/tag.action";
 import { SearchParamsProps } from "@/types";
 
 const Tags = async ({ searchParams }: SearchParamsProps) => {
-    const results = await getAllTags({ searchQuery: searchParams.q });
+    const results = await getAllTags({
+        searchQuery: searchParams.q,
+        filter: searchParams.filter,
+    });
 
     const isSearching = Boolean(searchParams.q || searchParams.filter);
 
@@ -29,7 +32,6 @@ const Tags = async ({ searchParams }: SearchParamsProps) => {
                 {results.tags.length > 0 ? (
                     results.tags.map((tag) => (
                         <TagCard key={tag._id.toString()} tag={tag} />
-                        // <UserCard key={tag._id} user={tag} />
                     ))
                 ) : (
                     <NoResult

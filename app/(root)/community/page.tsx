@@ -7,7 +7,10 @@ import { getAllUsers } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
 
 const Community = async ({ searchParams }: SearchParamsProps) => {
-    const results = await getAllUsers({ searchQuery: searchParams.q });
+    const results = await getAllUsers({
+        searchQuery: searchParams.q,
+        filter: searchParams.filter,
+    });
 
     return (
         <>

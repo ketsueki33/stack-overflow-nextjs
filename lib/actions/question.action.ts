@@ -24,7 +24,7 @@ export async function getQuestions(
     try {
         connectToDatabase();
 
-        const { searchQuery } = params;
+        const { searchQuery, filter } = params;
 
         const query: FilterQuery<typeof Question> = {};
 
@@ -35,6 +35,19 @@ export async function getQuestions(
             ];
         }
 
+        let sortOptions = {};
+
+        switch (filter) {
+            case "popular":
+                sortOptions = { views: -1 };
+                break;
+            case "unanswered":
+                query.answers = { $size: 0 };
+                break;
+            default:
+                sortOptions = { createdAt: -1 }; // "newest" is default case
+                break;
+        }
         const questions = await Question.find(query)
             .populate({
                 path: "tags",
@@ -46,7 +59,7 @@ export async function getQuestions(
                 model: User,
                 select: "clerkId _id picture username",
             })
-            .sort({ createdAt: -1 })
+            .sort(sortOptions)
             .lean<PopulatedQuestion[]>();
 
         return questions;

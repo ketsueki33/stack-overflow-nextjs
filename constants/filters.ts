@@ -1,8 +1,9 @@
 export const AnswerFilters = [
-    { name: "Highest Upvotes", value: "highestUpvotes" },
-    { name: "Lowest Upvotes", value: "lowestUpvotes" },
+    { name: "Highest Upvotes", value: "highest_upvotes" },
+    { name: "Lowest Upvotes", value: "lowest_upvotes" },
     { name: "Most Recent", value: "recent" },
     { name: "Oldest", value: "old" },
+    { name: "Controversial", value: "controversial" },
 ];
 
 export const UserFilters = [
@@ -29,7 +30,7 @@ export const TagFilters = [
 export const HomePageFilters = [
     { name: "Newest", value: "newest" },
     { name: "Recommended", value: "recommended" },
-    { name: "Frequent", value: "frequent" },
+    { name: "Popular", value: "popular" },
     { name: "Unanswered", value: "unanswered" },
 ];
 

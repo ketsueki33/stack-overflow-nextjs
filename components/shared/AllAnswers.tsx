@@ -15,11 +15,16 @@ interface Props {
     userId: string | undefined;
     totalAnswers: number;
     page?: number;
-    filter?: number;
+    filter?: string;
 }
 
-const AllAnswers = async ({ questionId, userId, totalAnswers }: Props) => {
-    const answers = await getAnswers({ questionId });
+const AllAnswers = async ({
+    questionId,
+    userId,
+    totalAnswers,
+    filter,
+}: Props) => {
+    const answers = await getAnswers({ questionId, sortBy: filter });
 
     const { userId: clerkId } = auth();
 
