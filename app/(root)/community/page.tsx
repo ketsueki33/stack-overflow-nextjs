@@ -4,9 +4,10 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
+import { SearchParamsProps } from "@/types";
 
-const Community = async () => {
-    const results = await getAllUsers({});
+const Community = async ({ searchParams }: SearchParamsProps) => {
+    const results = await getAllUsers({ searchQuery: searchParams.q });
 
     return (
         <>
@@ -28,12 +29,12 @@ const Community = async () => {
                         <UserCard key={user.clerkId} user={user} />
                     ))
                 ) : (
-                    <NoResult
-                        title="No users yet..."
-                        description="Join now to be the first!"
-                        linkTitle="Sign Up"
-                        linkTo="/sign-up"
-                    />
+                    <div className="col-span-full">
+                        <NoResult
+                            title="No users found..."
+                            description="Your search returned no results. Please try adjusting your search terms or filters."
+                        />
+                    </div>
                 )}
             </section>
         </>

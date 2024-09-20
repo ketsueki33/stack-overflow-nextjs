@@ -4,9 +4,12 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { TagFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tag.action";
+import { SearchParamsProps } from "@/types";
 
-const Tags = async () => {
-    const results = await getAllTags({});
+const Tags = async ({ searchParams }: SearchParamsProps) => {
+    const results = await getAllTags({ searchQuery: searchParams.q });
+
+    const isSearching = Boolean(searchParams.q || searchParams.filter);
 
     return (
         <>
@@ -30,10 +33,16 @@ const Tags = async () => {
                     ))
                 ) : (
                     <NoResult
-                        title="No tags yet..."
-                        description="Ask a Question to start discussion on your desired topic"
-                        linkTitle="Ask a Question"
-                        linkTo="/ask-question"
+                        title={
+                            isSearching ? "No tags found..." : "No tags yet..."
+                        }
+                        description={
+                            isSearching
+                                ? "Your search returned no results. Please try adjusting your search terms or filters."
+                                : "Ask a Question to start discussion on your desired topic"
+                        }
+                        linkTitle={isSearching ? undefined : "Ask a Question"}
+                        linkTo={isSearching ? undefined : "/ask-a-question"}
                     />
                 )}
             </section>

@@ -8,8 +8,8 @@ import { Button } from "../ui/button";
 interface Props {
     title: string;
     description: string;
-    linkTo: string;
-    linkTitle: string;
+    linkTo?: string;
+    linkTitle?: string;
 }
 
 const NoResult = ({ title, description, linkTo, linkTitle }: Props) => {
@@ -29,11 +29,13 @@ const NoResult = ({ title, description, linkTo, linkTitle }: Props) => {
             <p className="body-regular text-dark500_light700 my-2.5 max-w-md text-pretty text-center">
                 {description}
             </p>
-            <Link href={linkTo}>
-                <Button className="mt-6" variant="orange">
-                    {linkTitle}
-                </Button>
-            </Link>
+            {linkTo && (
+                <Link href={linkTo}>
+                    <Button className="mt-6" variant="orange">
+                        {linkTitle}
+                    </Button>
+                </Link>
+            )}
         </div>
     );
 };

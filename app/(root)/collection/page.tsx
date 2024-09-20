@@ -4,9 +4,11 @@ import NoResult from "@/components/shared/NoResult";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { QuestionFilters } from "@/constants/filters";
 import { getSavedQuestions } from "@/lib/actions/user.action";
+import { SearchParamsProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
+import console from "console";
 
-const Collection = async () => {
+const Collection = async ({ searchParams }: SearchParamsProps) => {
     const { userId } = auth();
 
     if (!userId)
@@ -19,7 +21,12 @@ const Collection = async () => {
             />
         );
 
-    const questions = await getSavedQuestions({ clerkId: userId });
+    const questions = await getSavedQuestions({
+        clerkId: userId,
+        searchQuery: searchParams.q,
+    });
+
+    const isSearching = Boolean(searchParams.q || searchParams.filter);
 
     return (
         <>
@@ -43,10 +50,18 @@ const Collection = async () => {
                     })
                 ) : (
                     <NoResult
-                        title="You haven't saved any questions yet"
-                        description="Your saved questions will appear here. Save the questions you want to go back to later without the hassle of searching for them again."
-                        linkTitle="Go to Home Page"
-                        linkTo="/"
+                        title={
+                            isSearching
+                                ? "No questions found..."
+                                : "You haven't saved any questions yet"
+                        }
+                        description={
+                            isSearching
+                                ? "Your search returned no results. Please try adjusting your search terms or filters."
+                                : "Your saved questions will appear here. Save the questions you want to go back to later without the hassle of searching for them again."
+                        }
+                        linkTitle={isSearching ? undefined : "Go to Home Page"}
+                        linkTo={isSearching ? undefined : "/"}
                     />
                 )}
             </div>

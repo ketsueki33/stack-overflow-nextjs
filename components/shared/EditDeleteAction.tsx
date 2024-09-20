@@ -32,6 +32,7 @@ const EditDeleteAction = ({ type, itemId, size = 15 }: Props) => {
     const handleDelete = async () => {
         if (type === "question") {
             await deleteQuestion({ path: pathname, questionId: itemId });
+            if (pathname.includes("question")) router.push(`/`);
         } else {
             await deleteAnswer({ path: pathname, answerId: itemId });
         }
