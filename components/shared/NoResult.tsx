@@ -16,7 +16,7 @@ const NoResult = ({ title, description, linkTo, linkTitle }: Props) => {
     const { mode } = useTheme();
 
     return (
-        <div className="mt-10 flex w-full flex-col items-center justify-center">
+        <div className="my-10 flex w-full flex-col items-center justify-center">
             <Image
                 alt="No result illustration"
                 src={`/assets/images/${mode === "light" ? "light" : "dark"}-illustration.png`}

@@ -9,6 +9,7 @@ import Votes from "./Votes";
 import { auth } from "@clerk/nextjs/server";
 import { SignedIn } from "@clerk/nextjs";
 import EditDeleteAction from "./EditDeleteAction";
+import Pagination from "./Pagination";
 
 interface Props {
     questionId: string;
@@ -23,8 +24,13 @@ const AllAnswers = async ({
     userId,
     totalAnswers,
     filter,
+    page,
 }: Props) => {
-    const answers = await getAnswers({ questionId, sortBy: filter });
+    const { answers, isNext } = await getAnswers({
+        questionId,
+        page: page ? +page : 1,
+        sortBy: filter,
+    });
 
     const { userId: clerkId } = auth();
 
@@ -104,6 +110,8 @@ const AllAnswers = async ({
                     );
                 })}
             </div>
+
+            <Pagination pageNumber={page ? +page : 1} isNext={isNext} />
         </div>
     );
 };

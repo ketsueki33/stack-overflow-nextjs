@@ -41,15 +41,19 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
     }
 }
 
-export async function getAllTags(
-    params: GetAllTagsParams,
-): Promise<{ tags: ITags[] }> {
+export async function getAllTags(params: GetAllTagsParams) {
     try {
         connectToDatabase();
 
-        const { searchQuery, filter } = params;
+        const {
+            searchQuery,
+            filter = "popular",
+            page = 1,
+            pageSize = 30,
+        } = params;
 
         const query: FilterQuery<typeof Tag> = {};
+        const skipCount = (page - 1) * pageSize;
 
         if (searchQuery) {
             query.$or = [{ name: { $regex: new RegExp(searchQuery, "i") } }];
@@ -74,8 +78,17 @@ export async function getAllTags(
                 break;
         }
 
-        const tags = await Tag.find(query).sort(sortOptions);
-        return { tags };
+        const tags = await Tag.find(query)
+            .skip(skipCount)
+            .limit(pageSize)
+            .sort(sortOptions)
+            .lean<ITags[]>();
+
+        const totalTags = await Tag.countDocuments(query);
+
+        const isNext = totalTags > skipCount + tags.length;
+
+        return { tags, isNext };
     } catch (error) {
         console.log(error);
         throw error;
@@ -84,9 +97,10 @@ export async function getAllTags(
 export async function getQuestionByTagId(params: GetQuestionsByTagIdParams) {
     try {
         connectToDatabase();
-        const { tagId, page = 1, pageSize = 10, searchQuery } = params;
+        const { tagId, page = 1, pageSize = 15, searchQuery } = params;
 
         const tagFilter: FilterQuery<ITags> = { _id: tagId };
+        const skipCount = (page - 1) * pageSize;
 
         const tag = await Tag.findOne(tagFilter)
             .populate({
@@ -105,6 +119,8 @@ export async function getQuestionByTagId(params: GetQuestionsByTagIdParams) {
                         },
                         { path: "tags", select: "_id name" },
                     ],
+                    skip: skipCount,
+                    limit: pageSize,
                 },
             })
             .lean<TagWithPopulatedQuestions>();
@@ -115,7 +131,12 @@ export async function getQuestionByTagId(params: GetQuestionsByTagIdParams) {
 
         const questions = tag.questions;
 
-        return { questions, tagTitle: tag.name.toUpperCase() };
+        const simpleTag = await Tag.findOne(tagFilter).lean<ITags>();
+        const totalQuestions = simpleTag!.questions.length;
+
+        const isNext = totalQuestions > skipCount + questions.length;
+
+        return { questions, isNext, tagTitle: tag.name.toUpperCase() };
     } catch (error) {
         console.log(error);
         throw error;

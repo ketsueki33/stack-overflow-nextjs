@@ -132,14 +132,13 @@ export async function deleteUser(params: DeleteUserParams) {
     }
 }
 
-export async function getAllUsers(
-    params: GetAllUsersParams,
-): Promise<{ users: IUser[] }> {
+export async function getAllUsers(params: GetAllUsersParams) {
     try {
         connectToDatabase();
-        const { searchQuery, filter } = params;
+        const { searchQuery, filter, page = 1, pageSize = 15 } = params;
 
         const query: FilterQuery<typeof User> = {};
+        const skipCount = (page - 1) * pageSize;
 
         if (searchQuery) {
             query.$or = [
@@ -164,9 +163,17 @@ export async function getAllUsers(
                 break;
         }
 
-        const users = await User.find(query).sort(sortOptions);
+        const users = await User.find(query)
+            .skip(skipCount)
+            .limit(pageSize)
+            .sort(sortOptions)
+            .lean<IUser[]>();
 
-        return { users };
+        const totalUsers = await User.countDocuments(query);
+
+        const isNext = totalUsers > skipCount + users.length;
+
+        return { users, isNext };
     } catch (error) {
         console.log(error);
         throw error;
@@ -217,12 +224,13 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
         const {
             clerkId,
             page = 1,
-            pageSize = 10,
+            pageSize = 15,
             filter,
             searchQuery,
         } = params;
 
         const query: FilterQuery<typeof Question> = {};
+        const skipCount = (page - 1) * pageSize;
 
         if (searchQuery) {
             query.$or = [
@@ -266,6 +274,8 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
                         },
                         { path: "tags", select: "_id name" },
                     ],
+                    skip: skipCount,
+                    limit: pageSize,
                 },
             })
             .lean<UserWithPopulatedQuestions>();
@@ -276,7 +286,12 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
 
         const savedQuestions = user.saved;
 
-        return savedQuestions;
+        const simpleUser = await User.findOne({ clerkId }).lean<IUser>();
+        const totalQuestions = simpleUser!.saved.length;
+
+        const isNext = totalQuestions > skipCount + savedQuestions.length;
+
+        return { questions: savedQuestions, isNext };
     } catch (error) {
         console.log(error);
         throw error;
@@ -313,15 +328,25 @@ export async function getUserQuestions(params: GetUserStatsParams) {
     try {
         connectToDatabase();
 
-        const { userId, page = 1, pageSize = 10 } = params;
+        const { userId, page = 1, pageSize = 15 } = params;
+
+        const skipCount = (page - 1) * pageSize;
 
         const userQuestions = await Question.find({ author: userId })
+            .skip(skipCount)
+            .limit(pageSize)
             .sort({ views: -1, upvotes: -1 })
             .populate("tags", "_id name")
             .populate("author", "_id clerkId username picture")
             .lean<PopulatedQuestion[]>();
 
-        return userQuestions;
+        const totalQuestions = await Question.countDocuments({
+            author: userId,
+        });
+
+        const isNext = totalQuestions > skipCount + userQuestions.length;
+
+        return { questions: userQuestions, isNext };
     } catch (error) {
         console.log(error);
         throw error;
@@ -332,15 +357,25 @@ export async function getUserAnswers(params: GetUserStatsParams) {
     try {
         connectToDatabase();
 
-        const { userId, page = 1, pageSize = 10 } = params;
+        const { userId, page = 1, pageSize = 15 } = params;
+
+        const skipCount = (page - 1) * pageSize;
 
         const userAnswers = await Answer.find({ author: userId })
+            .skip(skipCount)
+            .limit(pageSize)
             .sort({ upvotes: -1 })
             .populate("author", "_id clerkId username picture")
             .populate("question", "_id title")
             .lean<PopulatedAnswerWithQuestionTitle[]>();
 
-        return userAnswers;
+        const totalAnswers = await Answer.countDocuments({
+            author: userId,
+        });
+
+        const isNext = totalAnswers > skipCount + userAnswers.length;
+
+        return { answers: userAnswers, isNext };
     } catch (error) {
         console.log(error);
         throw error;

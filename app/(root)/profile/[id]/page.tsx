@@ -91,14 +91,14 @@ const ProfilePage = async ({ params, searchParams }: URLProps) => {
                     </TabsList>
                     <TabsContent value="top-posts">
                         <QuestionsTab
-                            // searchParams={searchParams}
+                            searchParams={searchParams}
                             userId={user._id.toString()}
                             clerkId={clerkId}
                         />
                     </TabsContent>
                     <TabsContent value="top-answers">
                         <AnswersTab
-                            // searchParams={searchParams}
+                            searchParams={searchParams}
                             userId={user._id.toString()}
                             clerkId={clerkId}
                         />

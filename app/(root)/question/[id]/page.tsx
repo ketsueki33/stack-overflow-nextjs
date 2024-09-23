@@ -113,13 +113,18 @@ const Page = async ({ params, searchParams }: URLProps) => {
                     ))}
                 </div>
                 <SignedIn>
-                    {showActionButtons && (
-                        <EditDeleteAction
-                            type="question"
-                            itemId={question._id.toString()}
-                            size={18}
-                        />
-                    )}
+                    <div className="flex gap-5">
+                        <Link href="#answer-form">
+                            <Button size="sm">Answer</Button>
+                        </Link>
+                        {showActionButtons && (
+                            <EditDeleteAction
+                                type="question"
+                                itemId={question._id.toString()}
+                                size={18}
+                            />
+                        )}
+                    </div>
                 </SignedIn>
             </div>
             <AllAnswers

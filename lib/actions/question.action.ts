@@ -18,15 +18,15 @@ import Answer from "@/database/answer.model";
 import Interaction from "@/database/interaction.model";
 import { FilterQuery } from "mongoose";
 
-export async function getQuestions(
-    params: GetQuestionsParams,
-): Promise<PopulatedQuestion[]> {
+export async function getQuestions(params: GetQuestionsParams) {
     try {
         connectToDatabase();
 
-        const { searchQuery, filter } = params;
+        const { searchQuery, filter, page = 1, pageSize = 15 } = params;
 
         const query: FilterQuery<typeof Question> = {};
+
+        const skipCount = (page - 1) * pageSize;
 
         if (searchQuery) {
             query.$or = [
@@ -59,10 +59,16 @@ export async function getQuestions(
                 model: User,
                 select: "clerkId _id picture username",
             })
+            .skip(skipCount)
+            .limit(pageSize)
             .sort(sortOptions)
             .lean<PopulatedQuestion[]>();
 
-        return questions;
+        const totalQuestions = await Question.countDocuments(query);
+
+        const isNext = totalQuestions > skipCount + questions.length;
+
+        return { questions, isNext };
     } catch (error) {
         console.log(error);
         throw error;
