@@ -67,7 +67,7 @@ export const BADGE_CRITERIA = {
     },
     TOTAL_VIEWS: {
         BRONZE: 1000,
-        SILVER: 10000,
-        GOLD: 100000,
+        SILVER: 5000,
+        GOLD: 10000,
     },
 };

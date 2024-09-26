@@ -1,3 +1,4 @@
+import { BADGE_CRITERIA } from "@/constants";
 import { IUser } from "@/database/user.model";
 import { Types } from "mongoose";
 
@@ -166,4 +167,11 @@ export interface UrlQueryParams {
 export interface RemoveUrlQueryParams {
     params: string;
     keys: string[];
+}
+
+export interface BadgeParam {
+    criteria: {
+        type: keyof typeof BADGE_CRITERIA;
+        count: number;
+    }[];
 }

@@ -7,6 +7,7 @@ import User, { IUser } from "@/database/user.model";
 import "@/database/tag.model";
 
 import {
+    BadgeCriteriaType,
     PopulatedAnswerWithQuestionTitle,
     PopulatedQuestion,
     UserWithPopulatedQuestions,
@@ -24,6 +25,7 @@ import {
     ToggleSaveQuestionParams,
     UpdateUserParams,
 } from "./shared.types";
+import { assignBadges } from "../utils";
 
 export const isUsernameAvailable = async (
     username: string,
@@ -310,14 +312,82 @@ export async function getUserInfo(params: GetUserByIdParams) {
             throw new Error("User not found");
         }
 
-        const totalQuestions = await Question.countDocuments({
-            author: user._id,
-        });
-        const totalAnswers = await Answer.countDocuments({
-            author: user._id,
-        });
+        const [
+            totalQuestions,
+            totalAnswers,
+            [questionUpvotes],
+            [answerUpvotes],
+            [questionViews],
+        ] = await Promise.all([
+            Question.countDocuments({ author: user._id }),
+            Answer.countDocuments({ author: user._id }),
+            Question.aggregate([
+                { $match: { author: user._id } },
+                {
+                    $project: {
+                        _id: 0,
+                        upvotes: { $size: "$upvotes" },
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalUpvotes: { $sum: "$upvotes" },
+                    },
+                },
+            ]),
+            Answer.aggregate([
+                { $match: { author: user._id } },
+                {
+                    $project: {
+                        _id: 0,
+                        upvotes: { $size: "$upvotes" },
+                    },
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalUpvotes: { $sum: "$upvotes" },
+                    },
+                },
+            ]),
+            Question.aggregate([
+                { $match: { author: user._id } },
+                {
+                    $group: {
+                        _id: null,
+                        totalViews: { $sum: "$views" },
+                    },
+                },
+            ]),
+        ]);
 
-        return { user, totalAnswers, totalQuestions };
+        const criteria = [
+            {
+                type: "QUESTION_COUNT" as BadgeCriteriaType,
+                count: totalQuestions,
+            },
+            {
+                type: "ANSWER_COUNT" as BadgeCriteriaType,
+                count: totalAnswers,
+            },
+            {
+                type: "QUESTION_UPVOTES" as BadgeCriteriaType,
+                count: questionUpvotes?.totalUpvotes || 0,
+            },
+            {
+                type: "ANSWER_UPVOTES" as BadgeCriteriaType,
+                count: answerUpvotes?.totalUpvotes || 0,
+            },
+            {
+                type: "TOTAL_VIEWS" as BadgeCriteriaType,
+                count: questionViews?.totalViews || 0,
+            },
+        ];
+
+        const badgeCounts = assignBadges({ criteria });
+
+        return { user, totalAnswers, totalQuestions, badgeCounts };
     } catch (error) {
         console.log(error);
         throw error;
