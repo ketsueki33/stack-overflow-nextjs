@@ -335,7 +335,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
         const userQuestions = await Question.find({ author: userId })
             .skip(skipCount)
             .limit(pageSize)
-            .sort({ views: -1, upvotes: -1 })
+            .sort({ createdAt: -1, views: -1, upvotes: -1 })
             .populate("tags", "_id name")
             .populate("author", "_id clerkId username picture")
             .lean<PopulatedQuestion[]>();
@@ -364,7 +364,7 @@ export async function getUserAnswers(params: GetUserStatsParams) {
         const userAnswers = await Answer.find({ author: userId })
             .skip(skipCount)
             .limit(pageSize)
-            .sort({ upvotes: -1 })
+            .sort({ createdAt: -1, upvotes: -1 })
             .populate("author", "_id clerkId username picture")
             .populate("question", "_id title")
             .lean<PopulatedAnswerWithQuestionTitle[]>();
