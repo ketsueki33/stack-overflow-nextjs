@@ -102,6 +102,22 @@ export async function createQuestion(params: CreateQuestionParams) {
                 },
                 { upsert: true, new: true },
             );
+
+            if (!existingTag.description) {
+                const response = await fetch(
+                    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/chatgpt`,
+                    {
+                        method: "POST",
+                        body: JSON.stringify({ tag }),
+                    },
+                );
+                const description = await response.json();
+
+                await Tag.findByIdAndUpdate(existingTag._id, {
+                    $set: { description: description.reply }, // Set the AI-generated description
+                });
+            }
+
             tagDocuments.push(existingTag._id);
         }
         await Question.findByIdAndUpdate(question._id, {
@@ -276,10 +292,10 @@ export async function editQuestion(params: EditQuestionParams) {
         question.content = content;
 
         await question.save();
-
-        // TODO: Create an interaction record for user's ask question action
-        // TODO: Incremenet author's reputation by +5 for creating a question
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 export async function getHotQuestions() {
