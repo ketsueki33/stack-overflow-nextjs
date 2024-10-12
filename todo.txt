@@ -3,3 +3,4 @@
 3. Change ParseHTML theme
 4. Check Question Details page responsiveness
 5. Handle case when page number is negative
+6. Top Interacted Tags

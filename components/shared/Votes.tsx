@@ -1,5 +1,6 @@
 "use client";
 
+import { useToast } from "@/hooks/use-toast";
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
 import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
@@ -35,16 +36,21 @@ const Votes = ({
     const pathname = usePathname();
     const router = useRouter();
 
+    const { toast } = useToast();
+
     useEffect(() => {
         if (type === "question") viewQuestion({ questionId: itemId, userId });
     }, [itemId, userId, pathname, router, type]);
 
     const handleSave = async () => {
         if (!userId) {
-            alert("YOU MUST BE SIGNED IN"); // REVIEW:
+            toast({
+                variant: "destructive",
+                title: "Please Sign in",
+                description: "You must be signed in to perform this action.",
+            });
             return;
         }
-        // TODO: call toaster to let user log in
 
         await toggleSaveQuestion({
             userId,
@@ -55,10 +61,13 @@ const Votes = ({
 
     const handleVote = async (action: "upvote" | "downvote") => {
         if (!userId) {
-            alert("YOU MUST BE SIGNED IN"); // REVIEW:
+            toast({
+                variant: "destructive",
+                title: "Please Sign in",
+                description: "You must be signed in to perform this action.",
+            });
             return;
         }
-        // TODO: call toaster to let user log in
 
         if (action === "upvote") {
             if (type === "question") {

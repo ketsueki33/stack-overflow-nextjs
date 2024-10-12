@@ -19,7 +19,6 @@ const LeftSidebar = () => {
                             item.route.length > 1) ||
                         pathname === item.route;
 
-                    // TODO: special routing for Profile page
                     return (
                         <Link
                             key={item.route}
