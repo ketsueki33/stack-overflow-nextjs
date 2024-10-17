@@ -9,6 +9,11 @@ import { HomePageFilters } from "@/constants/filters";
 import { getQuestions } from "@/lib/actions/question.action";
 import { SearchParamsProps } from "@/types";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Home",
+};
 
 const Home = async ({ searchParams }: SearchParamsProps) => {
     const { questions, isNext } = await getQuestions({

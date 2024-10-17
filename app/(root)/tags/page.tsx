@@ -6,6 +6,11 @@ import LocalSearch from "@/components/shared/search/LocalSearch";
 import { TagFilters } from "@/constants/filters";
 import { getAllTags } from "@/lib/actions/tag.action";
 import { SearchParamsProps } from "@/types";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Tags",
+};
 
 const Tags = async ({ searchParams }: SearchParamsProps) => {
     const results = await getAllTags({

@@ -6,7 +6,11 @@ import LocalSearch from "@/components/shared/search/LocalSearch";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
 import { SearchParamsProps } from "@/types";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+    title: "Community",
+};
 const Community = async ({ searchParams }: SearchParamsProps) => {
     const results = await getAllUsers({
         searchQuery: searchParams.q,

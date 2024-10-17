@@ -9,7 +9,10 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { ThemeProvider } from "@/context/ThemeProvider";
 
 export const metadata: Metadata = {
-    title: "CodeOverflow",
+    title: {
+        default: "CodeOverflow",
+        template: `%s | ${"CodeOverflow"}`,
+    },
     description:
         "CodeOverflow is a programmer's Q&A platform inspired by Stack Overflow. Ask and answer questions, vote on the best solutions, and connect with a vibrant community of developers.",
 };

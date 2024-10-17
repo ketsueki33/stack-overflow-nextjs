@@ -1,9 +1,22 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import NoResult from "@/components/shared/NoResult";
 import Pagination from "@/components/shared/Pagination";
+import { Metadata, ResolvingMetadata } from "next";
 import LocalSearch from "@/components/shared/search/LocalSearch";
 import { getQuestionByTagId } from "@/lib/actions/tag.action";
 import { URLProps } from "@/types";
+
+export async function generateMetadata(
+    { params }: URLProps,
+    _parent: ResolvingMetadata,
+): Promise<Metadata> {
+    const { tagTitle } = await getQuestionByTagId({
+        tagId: params.id,
+    });
+    return {
+        title: tagTitle,
+    };
+}
 
 const TagDetails = async ({ params, searchParams }: URLProps) => {
     console.log({ params, searchParams });
