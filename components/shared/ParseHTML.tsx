@@ -44,7 +44,7 @@ export const ParseHTML = ({ data }: Props) => {
 
     return (
         <>
-            <div>{parse(data)}</div>
+            <div className="markdown w-full">{parse(data)}</div>
         </>
     );
 };
