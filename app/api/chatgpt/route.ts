@@ -11,7 +11,6 @@ export const POST = async (request: Request) => {
         const prompt = `Give a brief description of ${tag} in about 30 words in the context of programming.`;
 
         const result = await model.generateContent(prompt);
-        console.log("RESULT", result.response.text());
 
         return NextResponse.json({ reply: result.response.text() });
     } catch (error) {

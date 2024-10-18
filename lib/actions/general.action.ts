@@ -35,8 +35,6 @@ export async function globalSearch(params: SearchParams) {
                     })
                     .limit(2);
 
-                // console.log({ type, queryResults });
-
                 results.push(
                     ...queryResults.map((item) => ({
                         title:

@@ -90,8 +90,6 @@ const Question = ({
 
     async function onSubmit(values: z.infer<typeof QuestionsSchema>) {
         setIsSubmitting(true);
-        console.log(values);
-        console.log("trigger");
 
         try {
             if (purpose === "post") {

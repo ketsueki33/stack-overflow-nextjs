@@ -76,6 +76,10 @@ export async function getQuestions(params: GetQuestionsParams) {
     }
 }
 
+const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 export async function createQuestion(params: CreateQuestionParams) {
     try {
         connectToDatabase();
@@ -93,9 +97,10 @@ export async function createQuestion(params: CreateQuestionParams) {
 
         // create tags or get them if they already exists
         for (const tag of tags) {
+            const escapedTag = escapeRegExp(tag);
             const existingTag = await Tag.findOneAndUpdate(
                 {
-                    name: { $regex: new RegExp(`^${tag}$`, "i") },
+                    name: { $regex: new RegExp(`^${escapedTag}$`, "i") },
                 },
                 {
                     $setOnInsert: { name: tag },

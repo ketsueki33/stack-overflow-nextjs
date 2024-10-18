@@ -19,7 +19,6 @@ export async function generateMetadata(
 }
 
 const TagDetails = async ({ params, searchParams }: URLProps) => {
-    console.log({ params, searchParams });
 
     const { questions, tagTitle, isNext } = await getQuestionByTagId({
         tagId: params.id,
