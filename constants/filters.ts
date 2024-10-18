@@ -29,7 +29,7 @@ export const TagFilters = [
 
 export const HomePageFilters = [
     { name: "Newest", value: "newest" },
-    { name: "Recommended", value: "recommended" },
+    // { name: "Recommended", value: "recommended" },
     { name: "Popular", value: "popular" },
     { name: "Unanswered", value: "unanswered" },
 ];

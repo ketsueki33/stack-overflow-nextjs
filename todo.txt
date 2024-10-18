@@ -1,6 +1,6 @@
 1. Handle questions and answers of deleted users
 2. Autocomplete tags in ask question
 3. Change ParseHTML theme
-4. Check Question Details page responsiveness
+
 5. Handle case when page number is negative
 6. Top Interacted Tags
