@@ -53,7 +53,7 @@ export async function getAllTags(params: GetAllTagsParams) {
         } = params;
 
         const query: FilterQuery<typeof Tag> = {};
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         if (searchQuery) {
             query.$or = [{ name: { $regex: new RegExp(searchQuery, "i") } }];
@@ -100,7 +100,7 @@ export async function getQuestionByTagId(params: GetQuestionsByTagIdParams) {
         const { tagId, page = 1, pageSize = 15, searchQuery } = params;
 
         const tagFilter: FilterQuery<ITags> = { _id: tagId };
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         const tag = await Tag.findOne(tagFilter)
             .populate({

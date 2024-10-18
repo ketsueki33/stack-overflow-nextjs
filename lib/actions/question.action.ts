@@ -27,7 +27,7 @@ export async function getQuestions(params: GetQuestionsParams) {
 
         const query: FilterQuery<typeof Question> = {};
 
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         if (searchQuery) {
             query.$or = [

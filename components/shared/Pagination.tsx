@@ -14,6 +14,8 @@ const Pagination = ({ pageNumber, isNext, scroll = true }: Props) => {
     const router = useRouter();
     const searchParams = useSearchParams();
 
+    if (pageNumber <= 0) pageNumber = 1;
+
     const handleNavigation = (direction: "prev" | "next") => {
         const nextPageNumber =
             direction === "next" ? pageNumber + 1 : pageNumber - 1;

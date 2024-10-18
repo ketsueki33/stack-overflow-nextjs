@@ -140,7 +140,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
         const { searchQuery, filter, page = 1, pageSize = 15 } = params;
 
         const query: FilterQuery<typeof User> = {};
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         if (searchQuery) {
             query.$or = [
@@ -232,7 +232,7 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
         } = params;
 
         const query: FilterQuery<typeof Question> = {};
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         if (searchQuery) {
             query.$or = [
@@ -400,7 +400,7 @@ export async function getUserQuestions(params: GetUserStatsParams) {
 
         const { userId, page = 1, pageSize = 15 } = params;
 
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         const userQuestions = await Question.find({ author: userId })
             .skip(skipCount)
@@ -429,7 +429,7 @@ export async function getUserAnswers(params: GetUserStatsParams) {
 
         const { userId, page = 1, pageSize = 15 } = params;
 
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         const userAnswers = await Answer.find({ author: userId })
             .skip(skipCount)

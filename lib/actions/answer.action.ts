@@ -56,7 +56,7 @@ export async function getAnswers(params: GetAnswersParams) {
         const { questionId, sortBy, page = 1, pageSize = 10 } = params;
 
         let sortOptions = {};
-        const skipCount = (page - 1) * pageSize;
+        const skipCount = page >= 1 ? (page - 1) * pageSize : 0;
 
         switch (sortBy) {
             case "highest_upvotes":
